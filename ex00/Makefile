@@ -1,4 +1,4 @@
-NAME    = scalar_types
+NAME    = convert
 SRCS    = $(shell find . -name "*.cpp")
 OBJS 	= ${SRCS:.cpp=.o}
 FLAGS   = -Wall -Wextra -Werror -std=c++98
