@@ -6,9 +6,9 @@ Class-ի static data member-ները օգտագործվում են class-ի բո
 օբյեկտների համար, քանի որ հիշողության մեջ դրանք նույն տեղն են զբաղեցնում:
 
 Static data member-ներին հասանելիություն ունեն միայն
->* տվյալ class-ի static method-ները
->* այլ static method-ներ
->* class-ից դուրս այլ method-ներ
+* տվյալ class-ի static method-ները
+* այլ static method-ներ
+* class-ից դուրս այլ method-ներ
 
 **Cast_ը հատուկ օպերատոր է, որը տվյալների մի տեսակը փոխարինում է մյուսով**:
 c++ _ում ունենք 4 տեսակի cast
