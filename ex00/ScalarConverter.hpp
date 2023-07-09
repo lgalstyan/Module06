@@ -9,7 +9,16 @@
 #define KMAG    "\x1B[35m"
 #define KCYN    "\x1B[36m"
 
-#include "iostream"
+#include <iostream>
+#include <sstream>
+/****************
+ * type values:
+ * 1 is char
+ * 2 is int
+ * 3 is float
+ * 4 is double
+ * 5 is inff
+****************/
 
 class ScalarConverter
 {
@@ -19,10 +28,25 @@ class ScalarConverter
         ScalarConverter& operator=(const ScalarConverter& );
         ~ScalarConverter();
 
-        static void convert(std::string );
+        static void convert(char *);
 
     private:
+        static int FindType();
+        static void print();
 
+        static char castChar();
+        static int castInt();
+        static float castFloat();
+        static double castDouble();
+
+        static bool checkChar();
+        static bool checkInt();
+        static bool checkFloat();
+        static bool checkDouble();
+
+        static double _literal;
+        static int _type;
+        static std::string _value;
 };
 
 #endif
