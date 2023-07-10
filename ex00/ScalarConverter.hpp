@@ -11,14 +11,14 @@
 
 #include <iostream>
 #include <sstream>
-/****************
- * type values:
- * 1 is char
- * 2 is int
- * 3 is float
- * 4 is double
- * 5 is inff
-****************/
+#include <cmath>
+
+enum inf_type
+{
+    INFINITY = 0;
+    MIN_INFINITY = 1;
+    NOT_A_NUMBER = 2;
+};
 
 class ScalarConverter
 {
@@ -31,9 +31,9 @@ class ScalarConverter
         static void convert(char *);
 
     private:
-        static void FindType();
         static void print();
-
+        static void print_inf();
+        
         static char castChar();
         static int castInt();
         static float castFloat();
@@ -44,9 +44,20 @@ class ScalarConverter
         static bool checkFloat();
         static bool checkDouble();
 
+        static int _intt;
+        static int _doublet;
+        static int _chart;
+        static int _floatt;
+
         static double _literal;
-        static int _type;
+        static inf_type _type;
         static std::string _value;
+
+        class UnknownTypeException : public std::exception
+        {
+            public:
+                const char * what() const throw();
+        };
 };
 
 #endif
