@@ -31,7 +31,7 @@ class ScalarConverter
         static void convert(char *);
 
     private:
-        static int FindType();
+        static void FindType();
         static void print();
 
         static char castChar();

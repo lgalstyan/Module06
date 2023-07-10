@@ -29,7 +29,7 @@ static bool ScalarConverter::checkChar()
 
 static bool ScalarConverter::checkInt()
 {
-    if (_literal.empty() || (!isdigit(_literal[0]) && _literal[0] != '-' && _literal[0] != '+'))
+    if (_literal.empty() || (!std::isdigit(_literal[0]) && _literal[0] != '-' && _literal[0] != '+'))
         return false;
 
     std::istringstream iss(_literal);
@@ -50,17 +50,17 @@ static bool ScalarConverter::checkDouble()
 
 }
 
-static int ScalarConverter::FindType()
+static void ScalarConverter::FindType()
 {
     if(checkChar())
-        return (1);
+        _type = 1;
     if(checkInt())
-        return (2);
+        _type = 2;
     if(checkFloat())
-        return (3);
+        _type = 3;
     if(checkDouble())
-        return (4);
-    return (5);
+        _type = 4;
+    _type = 5;
 }
 
 static void ScalarConverter::print()
