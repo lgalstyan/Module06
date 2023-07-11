@@ -1,6 +1,9 @@
 #include "ScalarConverter.hpp"
 
-ScalarConverter::ScalarConverter() : _type(3){}
+ScalarConverter::ScalarConverter()
+{
+    _type = DEFAULT; 
+}
 
 ScalarConverter::~ScalarConverter(){}
 
@@ -20,16 +23,16 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter& rhs)
     return (*this);
 }
 
-static bool ScalarConverter::checkChar()
-{
-    if (_value.size() == 1 && !std::isdigit(_value[0]) && std::isprint(_value[0]))
-        return (true);
-    return (false);
-}
+// static bool ScalarConverter::checkChar()
+// {
+//     if (_value.size() == 1 && !std::isdigit(_value[0]) && std::isprint(_value[0]))
+//         return (true);
+//     return (false);
+// }
 
-static bool ScalarConverter::checkInt()
+bool ScalarConverter::checkInt()
 {
-    if (_literal.empty() || (!std::isdigit(_literal[0]) && _literal[0] != '-' && _literal[0] != '+'))
+    if (_value.empty() || (!std::isdigit(_value[0]) && _value[0] != '-' && _value[0] != '+'))
         return false;
 
     std::istringstream iss(_literal);
@@ -37,54 +40,58 @@ static bool ScalarConverter::checkInt()
     char remainingChar;
     if (!(iss >> value) || iss.get(remainingChar))
         return false;
+    _intt = _literal;
+    _doublet = _literal * 1.0;
+    _floatt = _literal * 1.0;
+    _chart =  static_cast<char>(_literal);
     return true;
 }
 
-static bool ScalarConverter::checkFloat() 
+bool ScalarConverter::checkFloat() 
+{
+    
+}
+
+bool ScalarConverter::checkDouble()
 {
 
 }
 
-static bool ScalarConverter::checkDouble()
-{
-
-}
-
-static char ScalarConverter::castChar()
+char ScalarConverter::castChar()
 {
     if (_value.size() == 1)
     {
-        _chart = _value;
-        _intt = ststic_cast<int>_value;
+        _chart = _value[0];
+        _intt = static_cast<int>(_value[0]);
         _doublet = _intt * 1.0;
         _floatt = _intt * 1.0;
     }
     else if (_value == "nan")
         _type = NOT_A_NUMBER;
     else if(_value == "inf")
-        _type = INFINITY;
+        _type = PLUS_INFINITY;
     else if(_value == "-inf")
         _type = MIN_INFINITY;
     else
         throw UnknownTypeException();
 }
 
-static int ScalarConverter::castInt()
-{
+// static int ScalarConverter::castInt()
+// {
 
-}
+// }
 
-static float ScalarConverter::castFloat()
-{
+// static float ScalarConverter::castFloat()
+// {
 
-}
+// }
 
-static double ScalarConverter::castDouble()
-{
+// static double ScalarConverter::castDouble()
+// {
 
-}
+// }
 
-static void ScalarConverter::print_inf()
+void ScalarConverter::print_inf()
 {
     std::cout << "char: impossible\n";
     std::cout << "int: impossible\n";
@@ -108,8 +115,9 @@ static void ScalarConverter::print_inf()
     }
 }
 
-static void ScalarConverter::print()
+void ScalarConverter::print()
 {
+    if (std::isprint(_chart))
     std::cout << "char: ";
     std::cout << _chart << std::endl;
     std::cout << "int: ";
@@ -120,20 +128,28 @@ static void ScalarConverter::print()
     std::cout << _doublet << std::endl;
 }
 
-static void ScalarConverter::convert(char *input)
+void ScalarConverter::convert(char *input)
 {
     if (input == NULL)
         return ;
     _value = input;
     char *end = NULL;
     _literal = strtod(input, &end);
-    if (_literal == 0 && input != '0')
+    if (_literal == 0 && input[0] != '0')
     {
         castChar();
         if (_type != 3)
             print_inf();
         else
             print();
+    }
+    else if (checkInt())
+    {
+        print();
+    }
+    else if (checkFloat())
+    {
+        print();
     }
     //write for int, double, float
     // else if()

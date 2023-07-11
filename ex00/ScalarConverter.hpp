@@ -12,12 +12,12 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-
 enum inf_type
 {
-    INFINITY = 0;
-    MIN_INFINITY = 1;
-    NOT_A_NUMBER = 2;
+    PLUS_INFINITY = 0,
+    MIN_INFINITY = 1,
+    NOT_A_NUMBER = 2,
+    DEFAULT = 3
 };
 
 class ScalarConverter
@@ -39,15 +39,15 @@ class ScalarConverter
         static float castFloat();
         static double castDouble();
 
-        static bool checkChar();
+        // static bool checkChar();
         static bool checkInt();
         static bool checkFloat();
         static bool checkDouble();
 
         static int _intt;
-        static int _doublet;
-        static int _chart;
-        static int _floatt;
+        static double _doublet;
+        static char _chart;
+        static float _floatt;
 
         static double _literal;
         static inf_type _type;
