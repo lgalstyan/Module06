@@ -151,9 +151,15 @@ void ScalarConverter::print()
     std::cout << "int: ";
     std::cout << _intt << std::endl;
     std::cout << "float: ";
-    std::cout << _floatt << "f" << std::endl;
+    if (_value.find('.') == std::string::npos)
+        std::cout << _floatt << ".0f" << std::endl;
+    else
+        std::cout << _floatt << "f" << std::endl;
     std::cout << "double: ";
-    std::cout << _doublet << std::endl;
+    if (_value.find('.') == std::string::npos)
+        std::cout << _doublet << ".0" << std::endl;
+    else
+        std::cout << _doublet << std::endl;
 }
 
 void ScalarConverter::convert(char *input)
@@ -176,19 +182,8 @@ void ScalarConverter::convert(char *input)
         else
             print();
     }
-    else if (isNumber(input) && checkInt())
+    else if (isNumber(input) && (checkInt() || checkDouble() || checkFloat()))
     {
-        std::cout << "int\n";
-        print();
-    }
-    else if (isNumber(input) && checkDouble())
-    {
-        std::cout << "double\n";
-        print();
-    }
-    else if (isNumber(input) && checkFloat())
-    {
-        std::cout << "float\n";
         print();
     }
     else
