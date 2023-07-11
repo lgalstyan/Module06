@@ -17,17 +17,19 @@ ScalarConverter::~ScalarConverter(){}
 
 ScalarConverter::ScalarConverter(const ScalarConverter& other)
 {
-    *this = other;
+    (void)other;
+    // *this = other;
 }
 
 ScalarConverter& ScalarConverter::operator=(const ScalarConverter& rhs)
 {
-    if (this != &rhs)
-    {
-        _literal = rhs._literal;
-        _type = rhs._type;
-        _value = rhs._value;
-    }
+    (void)rhs;
+    // if (this != &rhs)
+    // {
+    //     _literal = rhs._literal;
+    //     _type = rhs._type;
+    //     _value = rhs._value;
+    // }
     return (*this);
 }
 
