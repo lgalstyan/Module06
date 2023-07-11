@@ -4,7 +4,7 @@ OBJS 	= ${SRCS:.cpp=.o}
 FLAGS   = -Wall -Wextra -Werror -std=c++98
 RM		= rm -rf
 CC      = c++
-
+  
 %.o: %.cpp %.hpp Makefile
 	@$(CC) ${FLAGS} -I. -c $< -o $@
 

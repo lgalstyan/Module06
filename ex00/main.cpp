@@ -3,11 +3,6 @@
 int main(int argc, char **argv)
 {
     ScalarConverter converter;
-    // double a;
-    // char szOrbits[] = "nan";
-    // char *end = NULL;
-    // a = strtod(szOrbits, &end);
-    // std::cout << a << std::endl;
     try
     {
         if (argc != 2)

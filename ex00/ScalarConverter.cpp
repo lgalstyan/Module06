@@ -10,7 +10,7 @@ std::string ScalarConverter::_value = "0";
 
 ScalarConverter::ScalarConverter()
 {
-    _type = DEFAULT; 
+    _type = DEFAULT;
 }
 
 ScalarConverter::~ScalarConverter(){}
