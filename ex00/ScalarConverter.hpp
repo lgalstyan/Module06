@@ -34,12 +34,9 @@ class ScalarConverter
         static void print();
         static void print_inf();
         
-        static char castChar();
-        static int castInt();
-        static float castFloat();
-        static double castDouble();
+        static void castChar();
 
-        // static bool checkChar();
+        static bool isNumber(char* );
         static bool checkInt();
         static bool checkFloat();
         static bool checkDouble();

@@ -1,5 +1,13 @@
 #include "ScalarConverter.hpp"
 
+int ScalarConverter::_intt = 0;
+double ScalarConverter::_doublet = 0;
+float ScalarConverter::_floatt = 0;
+char ScalarConverter::_chart = '0';
+double ScalarConverter::_literal = 0;
+inf_type ScalarConverter::_type = DEFAULT;
+std::string ScalarConverter::_value = "0";
+
 ScalarConverter::ScalarConverter()
 {
     _type = DEFAULT; 
@@ -9,36 +17,25 @@ ScalarConverter::~ScalarConverter(){}
 
 ScalarConverter::ScalarConverter(const ScalarConverter& other)
 {
-    // *this = other;
+    *this = other;
 }
 
 ScalarConverter& ScalarConverter::operator=(const ScalarConverter& rhs)
 {
-    // if (this != &rhs)
-    // {
-    //     _literal = rhs._literal;
-    //     _type = rhs._type;
-    //     _value = rhs._value;
-    // }
+    if (this != &rhs)
+    {
+        _literal = rhs._literal;
+        _type = rhs._type;
+        _value = rhs._value;
+    }
     return (*this);
 }
-
-// static bool ScalarConverter::checkChar()
-// {
-//     if (_value.size() == 1 && !std::isdigit(_value[0]) && std::isprint(_value[0]))
-//         return (true);
-//     return (false);
-// }
 
 bool ScalarConverter::checkInt()
 {
     if (_value.empty() || (!std::isdigit(_value[0]) && _value[0] != '-' && _value[0] != '+'))
         return false;
-
-    std::istringstream iss(_literal);
-    int value;
-    char remainingChar;
-    if (!(iss >> value) || iss.get(remainingChar))
+    if (_value.find('.') != std::string::npos)
         return false;
     _intt = _literal;
     _doublet = _literal * 1.0;
@@ -47,17 +44,45 @@ bool ScalarConverter::checkInt()
     return true;
 }
 
-bool ScalarConverter::checkFloat() 
+bool ScalarConverter::checkFloat()
 {
-    
+    if (_value.empty() || (!std::isdigit(_value[0]) && _value[0] != '-' && _value[0] != '+'))
+        return false;
+    if (_value.find('.') == std::string::npos)
+        return false;
+    if (_value.size() > 1 && _value[0] == '0' && _value[1] != '.')
+        return false;
+    size_t idx = _value.find('f');
+    if (idx == std::string::npos || _value.size() != idx + 1)
+        return false;
+    int tmp = floor(_literal);
+    _intt = tmp;
+    _doublet = _literal;
+    _floatt = _literal;
+    _chart =  static_cast<char>(_intt);
+    return true;
 }
 
 bool ScalarConverter::checkDouble()
 {
-
+    if (_value.empty() || (!std::isdigit(_value[0]) && _value[0] != '-' && _value[0] != '+'))
+        return false;
+    if (_value.find('.') == std::string::npos)
+        return false;
+    if (_value.size() > 1 && _value[0] == '0' && _value[1] != '.')
+        return false;
+    if (_value.find('f') != std::string::npos)
+        return false;
+    // std::cout << _literal << " " << _value;
+    int tmp = floor(_literal);
+    _intt = tmp;
+    _doublet = _literal;
+    _floatt = _literal;
+    _chart =  static_cast<char>(_intt);
+    return true;
 }
 
-char ScalarConverter::castChar()
+void ScalarConverter::castChar()
 {
     if (_value.size() == 1)
     {
@@ -75,21 +100,6 @@ char ScalarConverter::castChar()
     else
         throw UnknownTypeException();
 }
-
-// static int ScalarConverter::castInt()
-// {
-
-// }
-
-// static float ScalarConverter::castFloat()
-// {
-
-// }
-
-// static double ScalarConverter::castDouble()
-// {
-
-// }
 
 void ScalarConverter::print_inf()
 {
@@ -113,13 +123,31 @@ void ScalarConverter::print_inf()
         std::cout << "double: nan\n";
         return ;
     }
+    std::cout << "float: impossible\n";
+    std::cout << "double: impossible\n";
+}
+
+bool ScalarConverter::isNumber(char *value)
+{
+    char* endPtr;
+    strtod(value, &endPtr);
+
+    if (endPtr != value && *endPtr == '\0')
+    {
+        while (std::isspace(*endPtr))
+            ++endPtr;
+        return *endPtr == '\0';
+    }
+    return false;
 }
 
 void ScalarConverter::print()
 {
-    if (std::isprint(_chart))
     std::cout << "char: ";
+    if (std::isprint(_chart))
     std::cout << _chart << std::endl;
+    else
+        std::cout << "Non displayable.\n";
     std::cout << "int: ";
     std::cout << _intt << std::endl;
     std::cout << "float: ";
@@ -133,9 +161,14 @@ void ScalarConverter::convert(char *input)
     if (input == NULL)
         return ;
     _value = input;
-    char *end = NULL;
+    char *end;
     _literal = strtod(input, &end);
-    if (_literal == 0 && input[0] != '0')
+        // std::cout << "input " << input << ", " << _literal;
+    if (_literal == 0 && _value.find('.') != std::string::npos)
+    {
+        throw UnknownTypeException();
+    }
+    else if (_literal == 0 && input[0] != '0')
     {
         castChar();
         if (_type != 3)
@@ -143,22 +176,28 @@ void ScalarConverter::convert(char *input)
         else
             print();
     }
-    else if (checkInt())
+    else if (isNumber(input) && checkInt())
     {
+        std::cout << "int\n";
         print();
     }
-    else if (checkFloat())
+    else if (isNumber(input) && checkDouble())
     {
+        std::cout << "double\n";
         print();
     }
-    //write for int, double, float
-    // else if()
-    // {
-
-    // }
+    else if (isNumber(input) && checkFloat())
+    {
+        std::cout << "float\n";
+        print();
+    }
+    else
+    {
+        throw UnknownTypeException();
+    }
 }   
 
 const char* ScalarConverter::UnknownTypeException::what() const throw()
 {
-    return ("Exception: Unknown type\n");
+    return ("Exception: Unknown type");
 }
