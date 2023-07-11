@@ -21,7 +21,7 @@ c++ _ում ունենք 4 տեսակի cast
 1) Static Cast.
 2) Dynamic Cast.
 3) Const Cast.
-4) Reinterpret Cast.
+4) Reinterpret Cast.  
 
 > 1. static_cast<type> (expr)_ը կատարում է ոչ պոլիմորֆիկ cast: Օրինակ, այն կարող է օգտագործվել բազային դասի ցուցիչը ժառանգ դասի ցուցիչի մեջ գցելու համար:
 
