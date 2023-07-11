@@ -14,9 +14,8 @@ int main(int argc, char **argv)
             std::cerr << KCYN << "Convertor takes one parameter\n" << RESET;
         else
         {
-            std::cout << YELLOW;
+            std::cout << GREEN;
             converter.convert(argv[1]);
-            std::cout << RESET;
         }
     }
     catch(const std::exception& e)

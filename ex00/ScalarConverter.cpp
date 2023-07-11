@@ -38,8 +38,8 @@ bool ScalarConverter::checkInt()
     if (_value.find('.') != std::string::npos)
         return false;
     _intt = _literal;
-    _doublet = _literal * 1.0;
-    _floatt = _literal * 1.0;
+    _doublet = _literal;
+    _floatt = _literal;
     _chart =  static_cast<char>(_literal);
     return true;
 }
@@ -56,6 +56,8 @@ bool ScalarConverter::checkFloat()
     if (idx == std::string::npos || _value.size() != idx + 1)
         return false;
     int tmp = floor(_literal);
+    if (tmp < 0 && tmp != _literal)
+        ++tmp;
     _intt = tmp;
     _doublet = _literal;
     _floatt = _literal;
@@ -73,13 +75,25 @@ bool ScalarConverter::checkDouble()
         return false;
     if (_value.find('f') != std::string::npos)
         return false;
-    // std::cout << _literal << " " << _value;
     int tmp = floor(_literal);
+    if (tmp < 0 && tmp != _literal)
+        ++tmp;
+    _intt = tmp;
     _intt = tmp;
     _doublet = _literal;
     _floatt = _literal;
     _chart =  static_cast<char>(_intt);
     return true;
+}
+
+void ScalarConverter::GetTypeInf()
+{
+    if (_value == "nan" || _value == "nanf")
+        _type = NOT_A_NUMBER;
+    else if(_value == "inf" || _value == "inff")
+        _type = PLUS_INFINITY;
+    else if(_value == "-inf" || _value == "-inff")
+        _type = MIN_INFINITY;
 }
 
 void ScalarConverter::castChar()
@@ -88,17 +102,9 @@ void ScalarConverter::castChar()
     {
         _chart = _value[0];
         _intt = static_cast<int>(_value[0]);
-        _doublet = _intt * 1.0;
-        _floatt = _intt * 1.0;
+        _doublet = _intt;
+        _floatt = _intt;
     }
-    else if (_value == "nan")
-        _type = NOT_A_NUMBER;
-    else if(_value == "inf")
-        _type = PLUS_INFINITY;
-    else if(_value == "-inf")
-        _type = MIN_INFINITY;
-    else
-        throw UnknownTypeException();
 }
 
 void ScalarConverter::print_inf()
@@ -132,11 +138,13 @@ bool ScalarConverter::isNumber(char *value)
     char* endPtr;
     strtod(value, &endPtr);
 
-    if (endPtr != value && *endPtr == '\0')
+    if (endPtr != value && (*endPtr == '\0' || value[strlen(value) - 1] == 'f'))
     {
         while (std::isspace(*endPtr))
             ++endPtr;
-        return *endPtr == '\0';
+        if (*endPtr == '\0' || value[strlen(value) - 1] == 'f')
+        return true;
+            return false;
     }
     return false;
 }
@@ -151,12 +159,12 @@ void ScalarConverter::print()
     std::cout << "int: ";
     std::cout << _intt << std::endl;
     std::cout << "float: ";
-    if (_value.find('.') == std::string::npos)
+    if (_value.find('.') == std::string::npos || _literal == floor(_literal))
         std::cout << _floatt << ".0f" << std::endl;
     else
         std::cout << _floatt << "f" << std::endl;
     std::cout << "double: ";
-    if (_value.find('.') == std::string::npos)
+    if (_value.find('.') == std::string::npos || _literal == floor(_literal))
         std::cout << _doublet << ".0" << std::endl;
     else
         std::cout << _doublet << std::endl;
@@ -169,18 +177,19 @@ void ScalarConverter::convert(char *input)
     _value = input;
     char *end;
     _literal = strtod(input, &end);
-        // std::cout << "input " << input << ", " << _literal;
-    if (_literal == 0 && _value.find('.') != std::string::npos)
+    GetTypeInf();
+    if (_type != DEFAULT)
+    {
+        print_inf();
+    }
+    else if (_literal == 0 && (_value.find('.') != std::string::npos || _value.size() > 1))
     {
         throw UnknownTypeException();
     }
     else if (_literal == 0 && input[0] != '0')
     {
         castChar();
-        if (_type != 3)
-            print_inf();
-        else
-            print();
+        print();
     }
     else if (isNumber(input) && (checkInt() || checkDouble() || checkFloat()))
     {

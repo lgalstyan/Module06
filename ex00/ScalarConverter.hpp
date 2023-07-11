@@ -35,6 +35,7 @@ class ScalarConverter
         static void print_inf();
         
         static void castChar();
+        static void GetTypeInf();
 
         static bool isNumber(char* );
         static bool checkInt();
