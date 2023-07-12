@@ -8,28 +8,18 @@ double ScalarConverter::_literal = 0;
 inf_type ScalarConverter::_type = DEFAULT;
 std::string ScalarConverter::_value = "0";
 
-ScalarConverter::ScalarConverter()
-{
-    _type = DEFAULT;
-}
+ScalarConverter::ScalarConverter() {}
 
-ScalarConverter::~ScalarConverter(){}
+ScalarConverter::~ScalarConverter() {}
 
 ScalarConverter::ScalarConverter(const ScalarConverter& other)
 {
     (void)other;
-    // *this = other;
 }
 
 ScalarConverter& ScalarConverter::operator=(const ScalarConverter& rhs)
 {
     (void)rhs;
-    // if (this != &rhs)
-    // {
-    //     _literal = rhs._literal;
-    //     _type = rhs._type;
-    //     _value = rhs._value;
-    // }
     return (*this);
 }
 
@@ -39,9 +29,9 @@ bool ScalarConverter::checkInt()
         return false;
     if (_value.find('.') != std::string::npos)
         return false;
-    _intt = _literal;
-    _doublet = _literal;
-    _floatt = _literal;
+    _intt = static_cast<int>(_literal);
+    _doublet = static_cast<double>(_literal);
+    _floatt = static_cast<float>(_literal);
     _chart =  static_cast<char>(_literal);
     return true;
 }
@@ -57,12 +47,9 @@ bool ScalarConverter::checkFloat()
     size_t idx = _value.find('f');
     if (idx == std::string::npos || _value.size() != idx + 1)
         return false;
-    int tmp = floor(_literal);
-    if (tmp < 0 && tmp != _literal)
-        ++tmp;
-    _intt = tmp;
-    _doublet = _literal;
-    _floatt = _literal;
+    _intt = static_cast<char>(_literal);
+    _doublet = static_cast<double>(_literal);
+    _floatt = static_cast<float>(_literal);
     _chart =  static_cast<char>(_intt);
     return true;
 }
@@ -77,13 +64,9 @@ bool ScalarConverter::checkDouble()
         return false;
     if (_value.find('f') != std::string::npos)
         return false;
-    int tmp = floor(_literal);
-    if (tmp < 0 && tmp != _literal)
-        ++tmp;
-    _intt = tmp;
-    _intt = tmp;
-    _doublet = _literal;
-    _floatt = _literal;
+    _intt = static_cast<int>(_literal);
+    _doublet = static_cast<double>(_literal);
+    _floatt = static_cast<float>(_literal);
     _chart =  static_cast<char>(_intt);
     return true;
 }
@@ -104,8 +87,8 @@ void ScalarConverter::castChar()
     {
         _chart = _value[0];
         _intt = static_cast<int>(_value[0]);
-        _doublet = _intt;
-        _floatt = _intt;
+        _doublet = static_cast<double>(_value[0]);
+        _floatt = static_cast<float>(_value[0]);
     }
 }
 
@@ -155,7 +138,7 @@ void ScalarConverter::print()
 {
     std::cout << "char: ";
     if (std::isprint(_chart))
-    std::cout << _chart << std::endl;
+    std::cout << "\'" << _chart << "\'" << std::endl;
     else
         std::cout << "Non displayable.\n";
     std::cout << "int: ";
