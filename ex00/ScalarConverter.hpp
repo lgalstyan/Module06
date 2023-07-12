@@ -23,14 +23,14 @@ enum inf_type
 class ScalarConverter
 {
     public:
+        static void convert(char *);
+
+    private:
         ScalarConverter();
         ScalarConverter(const ScalarConverter& );
         ScalarConverter& operator=(const ScalarConverter& );
         ~ScalarConverter();
 
-        static void convert(char *);
-
-    private:
         static void print();
         static void print_inf();
         

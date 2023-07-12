@@ -2,7 +2,6 @@
 
 int main(int argc, char **argv)
 {
-    ScalarConverter converter;
     try
     {
         if (argc != 2)
@@ -10,7 +9,7 @@ int main(int argc, char **argv)
         else
         {
             std::cout << GREEN;
-            converter.convert(argv[1]);
+            ScalarConverter::convert(argv[1]);
         }
     }
     catch(const std::exception& e)
